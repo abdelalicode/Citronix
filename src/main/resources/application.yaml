@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    name: citronix
+    url: jdbc:postgresql://localhost:5432/citronix
+    username: postgres
+    password: azerty123
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  web:
+    path-match:
+      matching-strategy: ant_path_matcher
+    servlet:
+      path: /api/v1
+
+
+farm:
+  constraints:
+    field-min-area-ha: 0.1
+    field-farm-percentage: 0.5
+    max-fields-in-farm: 10
+    tree-max-life-years: 20
+
+
+

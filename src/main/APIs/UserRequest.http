@@ -1,0 +1,34 @@
+
+### ALL USERS
+GET  http://localhost:8080/api/users
+
+### FIND BY ID
+GET http://localhost:8080/api/users/2
+
+### FIND BY ID THAT DOESNT EXIST
+GET http://localhost:8080/api/users/99
+
+### CREATE USER
+POST http://localhost:8080/api/users/signup
+Content-Type: application/json
+
+{
+  "firstName": "Abdelali",
+  "lastName": "TAHA",
+  "age": 30,
+  "email": "abdelali@gmail.com",
+  "password": "azerty123",
+  "phone": "0663634313"
+}
+
+
+### LOGIN
+
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "email": "abdelali@gmail.com",
+  "password": "azerty123"
+}
+

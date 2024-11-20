@@ -1,0 +1,49 @@
+{
+  "banks": [
+    {
+      "bic": "BCPOMAMC",
+      "name": "Banque Centrale Populaire",
+      "basicLimit" : 20000
+    },
+    {
+      "bic": "BMCEMAMC",
+      "name": "Banque Marocaine du Commerce Extérieur",
+      "basicLimit" : 12000
+    },
+    {
+      "bic": "ATTIJARI",
+      "name": "Attijariwafa Bank",
+      "basicLimit" : 15000
+    },
+    {
+      "bic": "SGBMMAMC",
+      "name": "Société Générale Marocaine de Banques",
+      "basicLimit" : 10000
+    },
+    {
+      "bic": "CIHMMAMC",
+      "name": "Crédit Immobilier et Hôtelier",
+      "basicLimit" : 10000
+    },
+    {
+      "bic": "BMCI",
+      "name": "Banque Marocaine pour le Commerce et l'Industrie",
+      "basicLimit" : 13000
+    },
+    {
+      "bic": "WAFABANK",
+      "name": "Wafabank",
+      "basicLimit" : 5000
+    },
+    {
+      "bic": "CMAOMAMC",
+      "name": "Crédit Agricole du Maroc",
+      "basicLimit" : 5000
+    },
+    {
+      "bic": "BAMRMAA",
+      "name": "Banque Al-Maghrib",
+      "basicLimit" : 30000
+    }
+  ]
+}
