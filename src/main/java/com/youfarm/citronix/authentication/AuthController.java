@@ -4,7 +4,7 @@ import com.youfarm.citronix.common.response.ResponseHandler;
 import com.youfarm.citronix.domain.entity.User;
 import com.youfarm.citronix.dto.UserDTO;
 import com.youfarm.citronix.dto.UserReturnDTO;
-import com.youfarm.citronix.service.UserService;
+import com.youfarm.citronix.service.implementations.UserService;
 import com.youfarm.citronix.common.utils.EntityDtoMapper;
 import com.youfarm.citronix.common.utils.TokenUtil;
 import org.springframework.http.HttpStatus;

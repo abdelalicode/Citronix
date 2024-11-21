@@ -30,6 +30,10 @@ farm:
     field-farm-percentage: 0.5
     max-fields-in-farm: 10
     tree-max-life-years: 20
+    max-trees-by-hectare: 100
+    max-lifespan-productivity: 20
+
+
 
 
 

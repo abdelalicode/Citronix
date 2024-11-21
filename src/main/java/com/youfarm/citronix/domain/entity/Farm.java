@@ -1,5 +1,6 @@
 package com.youfarm.citronix.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,6 +38,7 @@ public class Farm {
     private User manager;
 
     @OneToMany(mappedBy = "farm", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Field> fields;
 
 

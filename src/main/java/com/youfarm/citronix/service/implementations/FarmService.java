@@ -1,4 +1,4 @@
-package com.youfarm.citronix.service;
+package com.youfarm.citronix.service.implementations;
 
 import com.youfarm.citronix.domain.entity.Farm;
 import com.youfarm.citronix.exception.NotFoundException;
@@ -6,6 +6,7 @@ import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.repository.FarmRepository;
 import com.youfarm.citronix.domain.entity.User;
 import com.youfarm.citronix.repository.UserRepository;
+import com.youfarm.citronix.service.CitroService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -13,7 +14,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class FarmService {
+public class FarmService implements CitroService<Farm, Long> {
 
 
     private final FarmRepository farmRepository;
@@ -33,11 +33,11 @@ public class FarmService {
         this.userRepository = userRepository;
     }
 
-    public List<Farm> getAllFarms() {
+    public List<Farm> getAll() {
         return farmRepository.findAll();
     }
 
-    public Farm createFarm(Farm farm){
+    public Farm create(Farm farm){
 
         Optional<Farm> existingFarm = farmRepository.findByManagerId(farm.getManager().getId());
         User manager  = userRepository.findById(farm.getManager().getId()).orElseThrow( () -> new NotFoundException("Manager with id: "+ farm.getManager().getId() + " Not Found"));
@@ -53,7 +53,7 @@ public class FarmService {
         return farmRepository.save(farm);
     }
 
-    public Farm updateFarm(Farm farm, Long id){
+    public Farm update(Farm farm, Long id){
         Farm existingFarm = farmRepository.findById(id).orElseThrow(() -> new NotFoundException("No Farm found by this id"));
         System.out.println(farm);
         if(farm.getManager().getId() != null){
@@ -70,7 +70,7 @@ public class FarmService {
 
     }
 
-    public Optional<Farm> getFarmById(Long id){
+    public Optional<Farm> getById(Long id){
         return farmRepository.findById(id);
     }
 

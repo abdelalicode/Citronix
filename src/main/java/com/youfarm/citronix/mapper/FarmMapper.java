@@ -2,7 +2,9 @@ package com.youfarm.citronix.mapper;
 
 import com.youfarm.citronix.common.config.GlobalMapperConfig;
 import com.youfarm.citronix.domain.entity.Farm;
+import com.youfarm.citronix.domain.entity.Field;
 import com.youfarm.citronix.dto.farm.FarmDTO;
+import com.youfarm.citronix.dto.farm.FarmResponseDTO;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -18,7 +20,22 @@ public interface FarmMapper {
     Farm toEntity(FarmDTO farmDTO);
 
 
-    List<FarmDTO> toDtos(List<Farm> farms);
+    @Mapping(source= "manager.firstName" , target = "managerFirstName")
+    @Mapping(source= "manager.lastName" , target = "managerLastName")
+    @Mapping(source= "fields" , target = "fieldsNumber" , qualifiedByName = "fieldsSize")
+    FarmResponseDTO entityToDto(Farm farm);
+
+
+    List<FarmResponseDTO> toDtos(List<Farm> farms);
+
+
+
     List<Farm> toEntities(List<FarmDTO> farmDTOs);
+
+
+    @Named("fieldsSize")
+    default Long fieldsSize(List<Field> fields) {
+        return fields != null ? (long) fields.size() : 0L;
+    }
 
 }

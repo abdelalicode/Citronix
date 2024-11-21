@@ -1,4 +1,4 @@
-package com.youfarm.citronix.service;
+package com.youfarm.citronix.service.implementations;
 
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.domain.entity.User;

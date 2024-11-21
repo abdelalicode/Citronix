@@ -18,6 +18,8 @@ public class FarmConfigProperties {
     private double fieldFarmPercentage;
     private int maxFieldsInFarm;
     private int treeMaxLifeYears;
+    private int maxTreesByHectare;
+    private int maxLifespanProductivity;
 
 
 

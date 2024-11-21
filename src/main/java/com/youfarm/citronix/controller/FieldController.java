@@ -1,13 +1,16 @@
 package com.youfarm.citronix.controller;
 
 import com.youfarm.citronix.common.BaseController;
+import com.youfarm.citronix.common.response.ResponseHandler;
+import com.youfarm.citronix.domain.entity.Field;
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.dto.field.FieldDTO;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.mapper.FieldMapper;
-import com.youfarm.citronix.service.FieldService;
-import com.youfarm.citronix.service.PermissionService;
+import com.youfarm.citronix.service.implementations.FieldService;
+import com.youfarm.citronix.service.implementations.PermissionService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +36,8 @@ public class FieldController extends BaseController {
            throw new UnAuthorizedException("No permission granted");
         }
 
-        fieldService.create(fieldMapper.toEntity(fieldDTO));
+        Field field = fieldService.create(fieldMapper.toEntity(fieldDTO) , authID);
 
-        return null;
+        return ResponseHandler.responseBuilder("Field Created successfully", HttpStatus.CREATED, fieldMapper.toResponseDTO(field));
     }
 }

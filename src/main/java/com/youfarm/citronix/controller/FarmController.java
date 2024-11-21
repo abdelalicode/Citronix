@@ -3,12 +3,13 @@ package com.youfarm.citronix.controller;
 import com.youfarm.citronix.common.BaseController;
 import com.youfarm.citronix.domain.entity.Farm;
 import com.youfarm.citronix.dto.farm.FarmDTO;
+import com.youfarm.citronix.dto.farm.FarmResponseDTO;
 import com.youfarm.citronix.exception.*;
 import com.youfarm.citronix.mapper.*;
-import com.youfarm.citronix.service.PermissionService;
+import com.youfarm.citronix.service.implementations.PermissionService;
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.common.response.ResponseHandler;
-import com.youfarm.citronix.service.FarmService;
+import com.youfarm.citronix.service.implementations.FarmService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -38,8 +39,9 @@ public class FarmController extends BaseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getFarm(@PathVariable long id, HttpServletRequest request) {
-        Farm farmFound = farmService.getFarmById(id).orElseThrow(() -> new NotFoundException("No Farm Found with this id"));
-        return ResponseHandler.responseBuilder("Farm Found", HttpStatus.OK, farmMapper.toDto(farmFound));
+        Farm farmFound = farmService.getById(id).orElseThrow(() -> new NotFoundException("No Farm Found with this id"));
+        FarmResponseDTO farmDTO = farmMapper.entityToDto(farmFound);
+        return ResponseHandler.responseBuilder("Farm Found", HttpStatus.OK, farmDTO);
     }
 
 
@@ -49,28 +51,30 @@ public class FarmController extends BaseController {
 
         if(permissionService.hasPermission(authId, PermissionType.FULL_ACCESS)) {
             Farm newFarm = farmMapper.toEntity(farmDto);
-            Farm farmCreated = farmService.createFarm(newFarm);
-            FarmDTO farmDTO = farmMapper.toDto(farmCreated);
-            return ResponseHandler.responseBuilder("Farm Created Successfully", HttpStatus.CREATED, farmDTO);
+            Farm farmCreated = farmService.create(newFarm);
+//            FarmDTO farmDTO = farmMapper.toDto(farmCreated);
+            FarmResponseDTO farmResponseDTO = farmMapper.entityToDto(farmCreated);
+            return ResponseHandler.responseBuilder("Farm Created Successfully", HttpStatus.CREATED, farmResponseDTO);
         }
         else {
-            throw new UnAuthorizedException("You do not have permission to create a mapper");
+            throw new UnAuthorizedException("You do not have permission to create a farm");
         }
     }
 
 
     @PutMapping("/{id}/update")
-    ResponseEntity<Object> updateFarm(@Valid @RequestBody FarmDTO farmDto, @PathVariable Long id , HttpServletRequest request) {
+    ResponseEntity<Object> updateFarm(@RequestBody FarmDTO farmDto, @PathVariable Long id , HttpServletRequest request) {
         Long authId = (Long) request.getAttribute("userId");
 
         if(permissionService.hasPermission(authId, PermissionType.FULL_ACCESS)) {
             Farm farm = farmMapper.toEntity(farmDto);
-            Farm farmUpdated = farmService.updateFarm(farm, id);
-            FarmDTO farmDTO = farmMapper.toDto(farmUpdated);
-            return ResponseHandler.responseBuilder("Farm Updated Successfully", HttpStatus.OK, farmDTO);
+            Farm farmUpdated = farmService.update(farm, id);
+//            FarmDTO farmDTO = farmMapper.toDto(farmUpdated);
+            FarmResponseDTO farmResponseDTO = farmMapper.entityToDto(farmUpdated);
+            return ResponseHandler.responseBuilder("Farm Updated Successfully", HttpStatus.OK, farmResponseDTO);
         }
         else {
-            throw new UnAuthorizedException("You do not have permission to update a mapper");
+            throw new UnAuthorizedException("You do not have permission to update a farm");
         }
 
     }
@@ -86,11 +90,18 @@ public class FarmController extends BaseController {
                                     Pageable pageable) {
         List<Farm> farms = farmService.getFarms(fromDate,toDate, name, pageable);
 
+
+
         if(farms.isEmpty()) {
             return ResponseHandler.errorBuilder("No Farm Found", HttpStatus.NOT_FOUND, "404");
         }
 
-        return ResponseHandler.responseBuilder("All Farms", HttpStatus.OK, farms);
+        List<FarmResponseDTO> farmsDTOs = farms.stream()
+                    .map(farmMapper::entityToDto)
+                    .toList();
+
+
+        return ResponseHandler.responseBuilder("All Farms You Searched For" , HttpStatus.OK, farmsDTOs);
     }
 
 }

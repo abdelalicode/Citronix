@@ -1,7 +1,7 @@
 package com.youfarm.citronix.controller;
 
 import com.youfarm.citronix.exception.UnAuthorizedException;
-import com.youfarm.citronix.service.PermissionService;
+import com.youfarm.citronix.service.implementations.PermissionService;
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.common.response.ResponseHandler;
 import com.youfarm.citronix.common.utils.EntityDtoMapper;
@@ -9,7 +9,7 @@ import com.youfarm.citronix.common.utils.TokenUtil;
 import com.youfarm.citronix.domain.entity.User;
 import com.youfarm.citronix.dto.UserDTO;
 import com.youfarm.citronix.dto.UserReturnDTO;
-import com.youfarm.citronix.service.UserService;
+import com.youfarm.citronix.service.implementations.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

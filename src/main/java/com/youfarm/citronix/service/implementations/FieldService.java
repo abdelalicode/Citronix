@@ -1,4 +1,4 @@
-package com.youfarm.citronix.service;
+package com.youfarm.citronix.service.implementations;
 
 import com.youfarm.citronix.common.config.FarmConfigProperties;
 import com.youfarm.citronix.domain.entity.Farm;
@@ -8,8 +8,10 @@ import com.youfarm.citronix.exception.SurfaceAreaException;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.repository.FarmRepository;
 import com.youfarm.citronix.repository.FieldRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.youfarm.citronix.service.CitroService;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class FieldService {
@@ -25,13 +27,18 @@ public class FieldService {
         this.constraints = constraints;
     }
 
-    public Field create(Field field) {
+    public Field create(Field field, Long authId) {
 
         if(field.getArea() < constraints.getFieldMinAreaHa()) {
             throw new UnAuthorizedException("Field area should at least be more than 0.1 ha");
         }
 
         Farm farm = farmRepository.findById(field.getFarm().getId()).orElseThrow(() -> new NotFoundException("Farm not found"));
+
+        if(!Objects.equals(farm.getManager().getId(), authId)) {
+            throw new UnAuthorizedException("You are not allowed to access this field");
+        }
+
         if(farm.getFields().size() >= constraints.getMaxFieldsInFarm()) {
             throw new SurfaceAreaException("Can't have more than " + constraints.getMaxFieldsInFarm() + " fields");
         }
@@ -53,7 +60,6 @@ public class FieldService {
 
         return fieldRepository.save(field);
     }
-
 
     private Double calculateFieldsTotalArea(Field field) {
         Double farmsfieldsArea = field.getFarm().getFields().stream().mapToDouble(Field::getArea).sum();
