@@ -17,9 +17,21 @@ public class FarmConfigProperties {
     private double fieldMinAreaHa;
     private double fieldFarmPercentage;
     private int maxFieldsInFarm;
-    private int treeMaxLifeYears;
     private int maxTreesByHectare;
     private int maxLifespanProductivity;
+
+    private TreeProdPerSeason treeProdPerSeason;
+
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TreeProdPerSeason {
+        private Double young;
+        private Double mature;
+        private Double old;
+    }
 
 
 

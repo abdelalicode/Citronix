@@ -13,6 +13,9 @@ import com.youfarm.citronix.repository.TreeRepository;
 import com.youfarm.citronix.service.CitroService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +54,10 @@ public class TreeService{
             throw new SurfaceAreaException("Field already has " + field.getTrees().size() + " Trees, You can't Plant more than " + maxTrees + " trees in Total" );
         }
 
+        if(field.getFarm().getCreationDate().isAfter(ChronoLocalDate.from(plantingTreesDTO.plantingDate()))) {
+            throw new UnAuthorizedException("Plantation Date can't be before Farm CreationDate");
+        }
+
         List<Tree> trees = new ArrayList<>();
 
         IntStream.range(0, Math.toIntExact(plantingTreesDTO.TreesNumber())).forEach(value -> {
@@ -72,4 +79,38 @@ public class TreeService{
         return (long) Math.floor((fieldArea * constraints.getMaxTreesByHectare()));
     }
 
+    public List<Tree> getTreesByFieldId(Long fieldID, Long authID) {
+
+        Field field = fieldRepository.findById(fieldID).orElseThrow( () -> new NotFoundException("Field not found"));
+        if(!field.getFarm().getManager().getId().equals(authID)) {
+            throw new UnAuthorizedException("You are not manager in this farm");
+        }
+
+        return treeRepository.findByFieldId(fieldID);
+    }
+
+
+
+    public Double getTreeProductivityPerSeason(Long TreeID, Long authId) {
+        Tree tree = treeRepository.findById(TreeID).orElseThrow( () -> new NotFoundException("Tree not found"));
+
+        if(!tree.getField().getFarm().getManager().getId().equals(authId)) {
+            throw new UnAuthorizedException("You are not manager in this farm");
+        }
+        long treeAge = ChronoUnit.YEARS.between(tree.getPlatingDate().toLocalDate(), LocalDate.now());
+
+        if(treeAge > constraints.getMaxLifespanProductivity()) {
+            return 0.0;
+        }
+        else {
+            if (treeAge < 3) {
+                return  constraints.getTreeProdPerSeason().getYoung();
+            } else if (treeAge <= 10) {
+                return constraints.getTreeProdPerSeason().getMature();
+            } else {
+                return constraints.getTreeProdPerSeason().getOld();
+            }
+        }
+
+    }
 }

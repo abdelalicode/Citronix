@@ -29,9 +29,14 @@ farm:
     field-min-area-ha: 0.1
     field-farm-percentage: 0.5
     max-fields-in-farm: 10
-    tree-max-life-years: 20
     max-trees-by-hectare: 100
     max-lifespan-productivity: 20
+    tree-prod-per-season:
+        young: 2.5
+        mature: 12
+        old: 20
+
+
 
 
 

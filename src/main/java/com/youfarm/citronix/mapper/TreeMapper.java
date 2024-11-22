@@ -4,6 +4,7 @@ import com.youfarm.citronix.common.config.GlobalMapperConfig;
 import com.youfarm.citronix.domain.entity.Farm;
 import com.youfarm.citronix.domain.entity.Tree;
 import com.youfarm.citronix.dto.tree.TreeVM;
+import com.youfarm.citronix.dto.tree.TreesDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,6 +19,9 @@ public interface TreeMapper {
 
     @Mapping(target = "age", expression = "java(calculateAge(tree.getPlatingDate()))")
     TreeVM treeToTreeVM(Tree tree);
+
+    @Mapping(target = "field.id", source = "fieldId")
+    Tree ToEntity(TreesDTO trdto);
 
 
     default Long calculateAge(LocalDateTime platingDate) {

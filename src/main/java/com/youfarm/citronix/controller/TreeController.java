@@ -6,17 +6,16 @@ import com.youfarm.citronix.domain.entity.Tree;
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.dto.tree.PlantingTreesDTO;
 import com.youfarm.citronix.dto.tree.TreeVM;
+import com.youfarm.citronix.dto.tree.TreesDTO;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.mapper.TreeMapper;
 import com.youfarm.citronix.service.implementations.PermissionService;
 import com.youfarm.citronix.service.implementations.TreeService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class TreeController extends BaseController {
     }
 
     @PostMapping
-    ResponseEntity<Object> plantTrees(@RequestBody PlantingTreesDTO plantingTreesDTO, HttpServletRequest request) {
+    ResponseEntity<Object> plantTrees(@Valid @RequestBody PlantingTreesDTO plantingTreesDTO, HttpServletRequest request) {
         Long authId = getUserId(request);
 
 
@@ -51,4 +50,33 @@ public class TreeController extends BaseController {
         return ResponseHandler.responseBuilder("Trees Planted Successfully", HttpStatus.CREATED, treesVm);
 
     }
+
+
+    @GetMapping
+    ResponseEntity<Object> getTreesByField(@RequestParam Long fieldID , HttpServletRequest request ) {
+        Long authID = getUserId(request);
+
+        if(!permissionService.hasPermission(authID, PermissionType.MANAGE_TREES)) {
+            throw new UnAuthorizedException("You are not authorized");
+        }
+
+        List<Tree> treesByField = treeService.getTreesByFieldId(fieldID, authID);
+
+        List<TreeVM> treesVmByField = treesByField.stream().map(treeMapper::treeToTreeVM).toList();
+
+        if(!treesVmByField.isEmpty()) {
+            ResponseHandler.errorBuilder("No Trees in this Field", HttpStatus.NOT_FOUND, "404");
+        }
+
+        return ResponseHandler.responseBuilder("Trees Retrieved Successfully", HttpStatus.OK, treesVmByField);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<Object> getTreeProductivityPerSeason(@PathVariable Long id, HttpServletRequest request) {
+        Long authID = getUserId(request);
+
+        return null;
+    }
+
+
 }
