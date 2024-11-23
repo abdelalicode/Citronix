@@ -8,20 +8,21 @@ import com.youfarm.citronix.exception.SurfaceAreaException;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.repository.FarmRepository;
 import com.youfarm.citronix.repository.FieldRepository;
-import com.youfarm.citronix.service.CitroService;
+import com.youfarm.citronix.service.contract.FieldService;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Objects;
 
 @Service
-public class FieldService {
+public class FieldServiceImpl implements FieldService {
 
 
     private final FieldRepository fieldRepository;
     private final FarmRepository farmRepository;
     private final FarmConfigProperties constraints;
 
-    public FieldService(FieldRepository fieldRepository, FarmRepository farmRepository, FarmConfigProperties constraints) {
+    public FieldServiceImpl(FieldRepository fieldRepository, FarmRepository farmRepository, FarmConfigProperties constraints) {
         this.fieldRepository = fieldRepository;
         this.farmRepository = farmRepository;
         this.constraints = constraints;
@@ -69,4 +70,5 @@ public class FieldService {
         return newFieldArea + farmsfieldsArea;
 
     }
+
 }

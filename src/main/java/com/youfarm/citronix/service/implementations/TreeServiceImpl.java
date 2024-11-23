@@ -10,7 +10,7 @@ import com.youfarm.citronix.exception.SurfaceAreaException;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.repository.FieldRepository;
 import com.youfarm.citronix.repository.TreeRepository;
-import com.youfarm.citronix.service.CitroService;
+import com.youfarm.citronix.service.contract.TreeService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,17 +18,16 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class TreeService{
+public class TreeServiceImpl implements TreeService {
 
     private final FieldRepository fieldRepository;
     private final FarmConfigProperties constraints;
     private final TreeRepository treeRepository;
 
-    public TreeService(FieldRepository fieldRepository, FarmConfigProperties constraints, TreeRepository treeRepository) {
+    public TreeServiceImpl(FieldRepository fieldRepository, FarmConfigProperties constraints, TreeRepository treeRepository) {
         this.fieldRepository = fieldRepository;
         this.constraints = constraints;
         this.treeRepository = treeRepository;

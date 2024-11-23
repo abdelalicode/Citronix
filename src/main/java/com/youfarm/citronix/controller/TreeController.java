@@ -6,11 +6,10 @@ import com.youfarm.citronix.domain.entity.Tree;
 import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.dto.tree.PlantingTreesDTO;
 import com.youfarm.citronix.dto.tree.TreeVM;
-import com.youfarm.citronix.dto.tree.TreesDTO;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.mapper.TreeMapper;
 import com.youfarm.citronix.service.implementations.PermissionService;
-import com.youfarm.citronix.service.implementations.TreeService;
+import com.youfarm.citronix.service.implementations.TreeServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,10 +24,10 @@ public class TreeController extends BaseController {
 
 
     private final PermissionService permissionService;
-    private final TreeService treeService;
+    private final TreeServiceImpl treeService;
     private final TreeMapper treeMapper;
 
-    public TreeController(PermissionService permissionService, TreeService treeService, TreeMapper treeMapper) {
+    public TreeController(PermissionService permissionService, TreeServiceImpl treeService, TreeMapper treeMapper) {
         this.permissionService = permissionService;
         this.treeService = treeService;
         this.treeMapper = treeMapper;
@@ -75,7 +74,15 @@ public class TreeController extends BaseController {
     ResponseEntity<Object> getTreeProductivityPerSeason(@PathVariable Long id, HttpServletRequest request) {
         Long authID = getUserId(request);
 
-        return null;
+        Double treeProductivityPerSeason = treeService.getTreeProductivityPerSeason(id, authID);
+
+        if(treeProductivityPerSeason == 0.0) {
+            return ResponseHandler.responseBuilder("No Productivity For this tree", HttpStatus.OK, "0 KG");
+        }
+
+        return ResponseHandler.responseBuilder("Tree's Productivity Per Season: (KG) " + treeProductivityPerSeason, HttpStatus.OK, treeProductivityPerSeason + " KG");
+
+
     }
 
 

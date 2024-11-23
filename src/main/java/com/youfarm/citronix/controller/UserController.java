@@ -9,7 +9,7 @@ import com.youfarm.citronix.common.utils.TokenUtil;
 import com.youfarm.citronix.domain.entity.User;
 import com.youfarm.citronix.dto.UserDTO;
 import com.youfarm.citronix.dto.UserReturnDTO;
-import com.youfarm.citronix.service.implementations.UserService;
+import com.youfarm.citronix.service.implementations.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,13 +23,13 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final EntityDtoMapper mapper;
     private final TokenUtil tokenUtil;
     private final PermissionService permissionService;
 
 
-    public UserController(UserService userService, EntityDtoMapper mapper, TokenUtil tokenUtil, PermissionService permissionService) {
+    public UserController(UserServiceImpl userService, EntityDtoMapper mapper, TokenUtil tokenUtil, PermissionService permissionService) {
         this.userService = userService;
         this.mapper = mapper;
         this.tokenUtil = tokenUtil;

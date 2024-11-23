@@ -7,7 +7,7 @@ import com.youfarm.citronix.domain.enums.PermissionType;
 import com.youfarm.citronix.dto.field.FieldDTO;
 import com.youfarm.citronix.exception.UnAuthorizedException;
 import com.youfarm.citronix.mapper.FieldMapper;
-import com.youfarm.citronix.service.implementations.FieldService;
+import com.youfarm.citronix.service.implementations.FieldServiceImpl;
 import com.youfarm.citronix.service.implementations.PermissionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class FieldController extends BaseController {
 
     private final PermissionService permissionService;
-    private final FieldService fieldService;
+    private final FieldServiceImpl fieldService;
     private final FieldMapper fieldMapper;
 
-    public FieldController(PermissionService permissionService, FieldService fieldService, FieldMapper fieldMapper) {
+    public FieldController(PermissionService permissionService, FieldServiceImpl fieldService, FieldMapper fieldMapper) {
         this.permissionService = permissionService;
         this.fieldService = fieldService;
         this.fieldMapper = fieldMapper;
