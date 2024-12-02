@@ -1,6 +1,7 @@
 package com.youfarm.citronix.exception;
 
 import com.youfarm.citronix.common.response.ResponseHandler;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -26,6 +27,15 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 HttpStatus.NOT_FOUND,
                 "404"
+        );
+    }
+
+    @ExceptionHandler(HarvestTreesSeasonException.class)
+    public ResponseEntity<Object> HarvestTreesSeasonException(HarvestTreesSeasonException ex) {
+        return ResponseHandler.responseBuilder(
+                ex.getMessage(),
+                HttpStatus.UNAUTHORIZED,
+                ex.getTreesConflicted()
         );
     }
 

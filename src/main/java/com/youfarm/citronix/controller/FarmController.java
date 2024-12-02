@@ -104,4 +104,20 @@ public class FarmController extends BaseController {
         return ResponseHandler.responseBuilder("All Farms You Searched For" , HttpStatus.OK, farmsDTOs);
     }
 
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Object> deleteFarm(@PathVariable Long id, HttpServletRequest request) {
+        Long authId = (Long) request.getAttribute("userId");
+
+        if (permissionService.hasPermission(authId, PermissionType.FULL_ACCESS)) {
+            farmService.delete(id);
+            return ResponseHandler.responseBuilder("Farm Deleted Successfully", HttpStatus.OK, null);
+        } else {
+            throw new UnAuthorizedException("You do not have permission to delete a farm");
+        }
+    }
+
+
+
+
 }

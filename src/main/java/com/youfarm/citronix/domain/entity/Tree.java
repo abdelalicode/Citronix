@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -26,6 +27,9 @@ public class Tree {
     @ManyToOne
     @JoinColumn(name = "field_id")
     private Field field;
+
+    @OneToMany(mappedBy = "tree", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HarvestDetails> harvestDetails;
 
 
 

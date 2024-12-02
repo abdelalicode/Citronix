@@ -97,4 +97,12 @@ public class FarmService implements CitroService<Farm, Long> {
 
         return farms;
     }
+
+    public void delete(Long id) {
+        Farm farm = farmRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("No Farm Found with this id"));
+
+        farmRepository.delete(farm);
+    }
+
 }
